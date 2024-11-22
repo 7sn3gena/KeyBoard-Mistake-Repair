@@ -35,14 +35,13 @@
     <p>Enter the text with incorrect keyboard language:</p>
     <textarea id="inputText" placeholder="Type here..."></textarea>
     <br>
-    <button onclick="convertText('toEnglish')">Convert to English</button>
-    <button onclick="convertText('toArabic')">Convert to Arabic</button>
+    <button onclick="convertText()">Convert</button>
     <div id="result"></div>
 
     <script>
         // جدول تحويل الحروف
         const arabicToEnglish = {
-            'ض': 'q', 'ص': 'w', 'ث': 'e', 'ق': 'r', 'ف': 't', 'غ': 'y', 'ع': 'u', 'ه': 'i', 'خ': 'o', 'ح': 'p',
+            'ذ': '`', 'ض': 'q', 'ص': 'w', 'ث': 'e', 'ق': 'r', 'ف': 't', 'غ': 'y', 'ع': 'u', 'ه': 'i', 'خ': 'o', 'ح': 'p', 'ج': '[' , 'د': ']',
             'ش': 'a', 'س': 's', 'ي': 'd', 'ب': 'f', 'ل': 'g', 'ا': 'h', 'ت': 'j', 'ن': 'k', 'م': 'l',
             'ك': ';', 'ط': "'", 'ئ': 'z', 'ء': 'x', 'ؤ': 'c', 'ر': 'v', 'لا': 'b', 'ى': 'n', 'ة': 'm', 'و': ',',
             'ز': '.', 'ظ': '/'
@@ -52,16 +51,27 @@
             Object.entries(arabicToEnglish).map(([arabic, english]) => [english, arabic])
         );
 
-        function convertText(direction) {
+        function convertText() {
             const inputText = document.getElementById('inputText').value;
             let result = '';
 
-            const conversionMap = direction === 'toEnglish' ? arabicToEnglish : englishToArabic;
-
+            // تحويل النص حرف حرف
             for (let char of inputText) {
-                result += conversionMap[char] || char; // استبدل الحرف أو احتفظ به إذا لم يوجد
+                // إذا كان الحرف في اللغة العربية، نحوله إلى الإنجليزي
+                if (arabicToEnglish[char]) {
+                    result += arabicToEnglish[char];
+                } 
+                // إذا كان الحرف في اللغة الإنجليزية، نحوله إلى العربي
+                else if (englishToArabic[char]) {
+                    result += englishToArabic[char];
+                } 
+                // إذا لم يكن الحرف موجودًا في الجدولين، نتركه كما هو
+                else {
+                    result += char;
+                }
             }
 
+            // عرض النتيجة
             document.getElementById('result').textContent = result;
         }
     </script>
